@@ -79,18 +79,6 @@ User.getByName = function(name, fn){
     });
 };
 
-User.authenticate = function(name, pass, fn){
-  User.getByName(name, function(err, user){
-    if (err) return fn(err);
-    if (!user.id) return fn();
-    bcrypt.hash(pass, user.salt, function(err, hash){
-      if (err) return fn(err);
-      if (hash == user.pass) return fn(null, user);
-      fn();
-    });
-  });
-};
-
 User.prototype.authenticate = function(name, pass, fn) {
     User.getByName(name, function(err, user){
         if (err) return fn(err);

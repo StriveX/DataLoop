@@ -1,0 +1,14 @@
+{
+  "name": "worldsensor",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "mysql": "*",
+    "ejs": "*",
+    "bcrypt": "*",
+    "express": "3.x"
+  }
+}

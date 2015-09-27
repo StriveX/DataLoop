@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
 
 connection.query('USE mysite');
 
-module.export = User;
+module.exports = User;
 
 function User(obj) {
     for (var key in obj) {
@@ -34,10 +34,7 @@ User.prototype.save = function(fn) {
 
 User.prototype.update = function(fn) {
     var user = this;
-    //var id = user.id;
-    //if (err) return fn(err);
-    console.log('%s %s %s', user.name,user.salt,user.pass);
-    connection.query("INSERT INTO user (name, salt, pass) " +
+    connection.query("INSERT INTO users (name, salt, pass) " +
         "VALUES (?,?,?)",
         [user.name, user.salt, user.pass],
         function(err,result) {
@@ -71,21 +68,34 @@ tobi.save(function(err){
 });
 */
 
-User.getByName = function(name, fn){
-    connection.query("SELECT * from user WHERE name=?", [name], function(err, rows){
+User.getByName = function(name, fn) {
+    connection.query("SELECT * FROM users WHERE name=?", [name], function(err, rows){
         if (err) return fn(err);
-        if (rows.length > 0) return fn(null, new User(rows));
-        return fn(null, null);
+        //if (rows.length > 1) console.log("ERROR: user duplicate name");
+        var user = new User(rows[0]);
+        if (rows.length > 0) return fn(null, user);
+        fn(null, null);
     });
 };
 
-User.prototype.authenticate = function(name, pass, fn) {
+User.getById = function(id, fn) {
+    connection.query("SELECT * FROM users WHERE id=?", [id], function(err, rows) {
+        if (err) return fn(err);
+        var user = new User(rows[0]);
+        if (rows.length > 0) return fn(null, user);
+        return fn(null, null);      // necessary???
+    });
+};
+
+User.authenticate = function(name, pass, fn) {
     User.getByName(name, function(err, user){
         if (err) return fn(err);
         if (!user) return fn();
         bcrypt.hash(pass, user.salt, function(err, hash){
             if (err) return fn(err);
-            if (hash == user.pass) return fn(null, user);
+            if (hash == user.pass) {
+                return fn(null, user);
+            }
             fn();
         });
     });

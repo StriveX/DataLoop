@@ -108,6 +108,12 @@ a {
   display: block;
 }
 
+.icon {
+  cursor: pointer;
+  align: right;
+  display: inline-block
+}
+
 /* Button */
 .ph-button {
   border-style: solid;

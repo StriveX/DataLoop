@@ -18,10 +18,10 @@ exports.form = function(req, res) {
 exports.submit = function(req, res, next) {
     var data = req.body.entry;
     console.log("start", data);
-    if (!res.locals.user.id) {
+/*    if (!res.locals.user) {
         res.error("You are log out.");
     }
-    console.log("session uid", res.locals.user.id);
+    console.log("session user", res.locals.user);*/
     var owner = 1;
     if (data.private=='1') {
         owner = res.locals.user.id;
@@ -40,12 +40,11 @@ exports.submit = function(req, res, next) {
             });
             newEntry.create(data, function(err) {
                 if (err) return next(err);
-            });
-            newEntry.save(function(err) {
-                console.log("done", err);
-                if (err) return next(err);
-                console.log("1");
-                res.redirect('/');
+                newEntry.save(function(err) {
+                    console.log("done!!!!!!!!!!!", err);
+                    if (err) return next(err);
+                    res.redirect('/collection/'+data.name);
+                });
             });
         }
     });

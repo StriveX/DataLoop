@@ -56,6 +56,7 @@ app.post('/entry', entries.submit);
 
 app.get('/collection/:name', collection.form);
 app.post('/collection/:name', collection.submit);
+app.delete('/collection/:name', collection.remove);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

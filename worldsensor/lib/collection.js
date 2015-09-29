@@ -1,13 +1,4 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'zx0228033018',
-    databse: 'mysite'
-});
-
-connection.query('USE mysite');
-
+var Connection = require('./connDB');
 module.exports = Collection;
 
 function Collection(obj) {
@@ -17,17 +8,21 @@ function Collection(obj) {
 }
 
 Collection.getByName = function(name, fn) {
-    connection.query("SELECT * FROM ??", [name], function(err, rows){
-    	console.log("result", err, rows, name);
-        if (err) return fn(err);
-        return fn(null, rows);
-    });
+	Connection.connect(function(connection) {
+	    connection.query("SELECT * FROM ??", [name], function(err, rows){
+	    	console.log("result", err, rows, name);
+	        if (err) return fn(err);
+	        return fn(null, rows);
+	    });
+	});
 };
 
 Collection.count = function(fn){
-  	connection.query("SELECT COUNT(*) AS count FROM entries",
-  		function(err, result) {
-  			if (err) return fn(err);
-  			fn(err, result[0].count);
-  	});
+	Connection.connect(function(connection) {
+	  	connection.query("SELECT COUNT(*) AS count FROM entries",
+	  		function(err, result) {
+	  			if (err) return fn(err);
+	  			fn(err, result[0].count);
+	  	});
+	});
 };

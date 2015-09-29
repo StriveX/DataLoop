@@ -7,12 +7,9 @@
     </head>
     <body>
         <% include menu %>
-
         <h1><%= title %></h1>
         <p>Fill in the form below to add a new post.</p>
-
         <% include messages %>
-
         <form action='/entry' method='post'>
             <p>
                 <input type='text' name='entry[name]' placeholder='Name' />
@@ -31,7 +28,7 @@
             </div>
             <p>
                 <input type='radio' name='entry[access]' value='0' checked>Public<br>
-                <input type='radio' name='entry[access]' value='1'>Private
+                <input type='radio' name='entry[access]' value='1' <% if (!locals.user){ %>disabled<%}%> >Private
             </p>
             <p>
                 <textarea name='entry[description]' placeholder='Description (optional)'></textarea>

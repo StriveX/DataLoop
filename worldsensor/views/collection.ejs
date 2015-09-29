@@ -3,12 +3,18 @@
     <head>
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script type="text/javascript">
             $(function(){
                 $('#add').click(function() {
                     var data = {};
                     <% columnInfos.forEach(function(colInfo) { %>
+                        var value = $("#<%= colInfo['Field'] %>").val()
+                        if (value == "") {
+                            alert("All data are required.");
+                            return;
+                        }
                         data.<%= colInfo['Field'] %> = $("#<%= colInfo['Field'] %>").val();
                     <% }) %>
                     console.log('click');
@@ -16,7 +22,7 @@
                         type: 'POST',
                         data: JSON.stringify(data),
                         contentType: 'application/json',
-                        url: 'http://localhost:3000/collection/<%= table %>',            // PROBLEM here!!!                   
+                        url: 'http://localhost:3000/collection/<%= table %>',                
                         success: function(data) {}
                     });
 
@@ -24,7 +30,7 @@
                     for (var key in data) {
                             newRow += '<div class="cell">' + data[key] + '</div>';
                     }
-                    newRow += '<div class="cell">Update</div><div class="cell">Remove</div> </div>';
+                    newRow += '<div class="cell icon"><i class="fa fa-pencil"></i></div><div class="cell icon"><i class="fa fa-times"></i></div> </div>';
                     $(newRow).insertAfter("#insert");
                 });
             })
@@ -33,21 +39,35 @@
                     $('input').val('');
                 });
             })
+            $(function(){
+                $('#cancel').click(function() {
+                    $.ajax({
+                        type: 'DELETE',
+                        data: [],
+                        contentType: 'application/json',
+                        url: 'http://localhost:3000/collection/<%= table %>',            // PROBLEM here!!!                   
+                        success: function(data) {}
+                    });
+                });
+            })
+            $( "div div:first-child" ).hide();
         </script>
     </head>
     <body>
         <% include menu %>
         <div class="wrapper">
         <div class="table">
-
             <div class="row header blue">
                 <% columnInfos.forEach(function(colInfo) { %>
                 <div class="cell">
                     <%= colInfo['Field'] %>
                 </div>
                 <% }) %>
-                <div class="cell"></div>
-                <div class="cell">Delete Collection</div>
+                <div class="cell icon"></div>
+                <div class="cell icon">
+                    <a class="btn btn-danger" href="#">
+                        <i class="fa fa-trash-o fa-lg" id="delete"></i></a>
+                </div>
             </div>
 
             <div class="row" id="insert">
@@ -58,8 +78,8 @@
                                            placeholder='<%= colInfo['Type']%>' />
                     </div>
                 <% }) %>
-                <a><div class="cell" id="add">Add</div></a>
-                <div class="cell" id="cancel"><a>Cancel</a></div>
+                <a><div class="cell icon" id="add"><i class="fa fa-plus-square"></i></div></a>
+                <div class="cell icon" id="cancel"><a><i class="fa fa-minus-square"></i></a></div>
             </div>
 
             <% collections.forEach(function(row) { %>
@@ -69,8 +89,8 @@
                     <%= row[key] %>
                     </div>
                 <% } %>
-                <div class="cell">Update</div>
-                <div class="cell">Remove</div>
+                <div class="cell icon"><i class="fa fa-pencil"></i></div>
+                <div class="cell icon"><i class="fa fa-times"></i></div>
                 </div>
             <% }) %>
         </div>

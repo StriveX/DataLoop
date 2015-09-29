@@ -51,11 +51,11 @@ Entry.remove = function(name, fn) {
 	var entry = this;
 	Connection.connect(function(connection) {
 		connection.query("DROP TABLE ??",
-			[name + '_data'],
+			[name],
 			function(err) {
 				fn(err);
 		});
-		connection.query("DELETE FROM entries WHERE name = ?",
+		connection.query("DELETE FROM entries WHERE data_table = ?",
 			[name],
 			function(err) {
 				fn(err);

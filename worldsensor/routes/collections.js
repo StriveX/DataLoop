@@ -36,6 +36,7 @@ exports.remove = function(req, res, next) {
     var name = req.params.name;
     console.log("name", name);
     Entry.remove(name, function(err) {
-        next(err);
+        if (err) next(err);
+        res.redirect('/');
     });     // About how to organize functions of entry and collection, need to be considered
 }

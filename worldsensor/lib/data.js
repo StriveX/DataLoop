@@ -9,7 +9,7 @@ function Data(obj) {
 
 // prototype defines a class function: e.g. call Data.save(..)
 Data.save = function(uid, data, table, fn) {
-	var sql = "INSERT INTO ?? VALUES (";
+	var sql = "INSERT INTO ?? VALUES (DEFAULT, ";
 	for (var key in data) {
 		sql += data[key] + ", ";
 	}

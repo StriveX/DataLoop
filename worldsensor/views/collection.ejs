@@ -32,6 +32,8 @@
                     }
                     newRow += '<div class="cell icon"><i class="fa fa-pencil"></i></div><div class="cell icon"><i class="fa fa-times"></i></div> </div>';
                     $(newRow).insertAfter("#insert");
+                    $("div.cell:first-child" ).hide();
+                    $("div.cell:nth-last-of-type(3)" ).hide();
                 });
             })
             $(function(){
@@ -40,7 +42,7 @@
                 });
             })
             $(function(){
-                $('#cancel').click(function() {
+                $('#delete').click(function() {
                     $.ajax({
                         type: 'DELETE',
                         data: [],
@@ -50,7 +52,10 @@
                     });
                 });
             })
-            $( "div div:first-child" ).hide();
+            $(document).ready(function() {
+                $("div.cell:first-child" ).hide();
+                $("div.cell:nth-last-of-type(3)" ).hide();
+            });
         </script>
     </head>
     <body>
@@ -63,7 +68,7 @@
                     <%= colInfo['Field'] %>
                 </div>
                 <% }) %>
-                <div class="cell icon"></div>
+                <div class="cell"></div>
                 <div class="cell icon">
                     <a class="btn btn-danger" href="#">
                         <i class="fa fa-trash-o fa-lg" id="delete"></i></a>
@@ -71,15 +76,20 @@
             </div>
 
             <div class="row" id="insert">
-                <% columnInfos.forEach(function(colInfo) { %>
+                
+
+                <div class="cell">No id</div>
+                <% for (var i=1;i<columnInfos.length-1;i++) { %>
                     <div class="cell">
-                        <input type='text' name='data[<%= colInfo['Field']%>]' 
-                                           id='<%= colInfo['Field'] %>' 
-                                           placeholder='<%= colInfo['Type']%>' />
+                        <input type='text' name='data[<%= columnInfos[i]['Field']%>]' 
+                                           id='<%= columnInfos[i]['Field'] %>' 
+                                           placeholder='<%= columnInfos[i]['Type']%>' />
                     </div>
-                <% }) %>
-                <a><div class="cell icon" id="add"><i class="fa fa-plus-square"></i></div></a>
-                <div class="cell icon" id="cancel"><a><i class="fa fa-minus-square"></i></a></div>
+                <% } %>
+                <div class="cell">No user</div>
+
+                <div class="cell icon" id="add"><i class="fa fa-plus-square"></i></div>
+                <div class="cell icon" id="cancel"><i class="fa fa-minus-square"></i></div>
             </div>
 
             <% collections.forEach(function(row) { %>

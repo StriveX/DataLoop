@@ -41,7 +41,6 @@ exports.submit = function(req, res, next) {
             newEntry.create(data, function(err) {
                 if (err) return next(err);
                 newEntry.save(function(err) {
-                    console.log("done!!!!!!!!!!!", err);
                     if (err) return next(err);
                     res.redirect('/collection/'+data.name);
                 });

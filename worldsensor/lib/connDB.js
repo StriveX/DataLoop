@@ -19,7 +19,7 @@ Connection.connect = function(fn) {
 	    host: host,
 	    user: user,
 	    password: password,
-	    databse: databse
+	    port: port
 	});
     connection.query('USE mysite');
     fn(connection);
